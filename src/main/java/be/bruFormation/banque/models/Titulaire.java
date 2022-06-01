@@ -4,18 +4,23 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 /**
- @attribute firstName String
- @attribute lastName String
- @attribute birthDate LocalDate
-
- @invariant firstName != null && nom.length > 0
- @invariant lastName != null && prenom.length > 0
- @invariant birthDate > '1900-01-01
+ * @attribute firstName String
+ * @attribute lastName String
+ * @attribute birthDate LocalDate
+ * @invariant firstName != null && nom.length > 0
+ * @invariant lastName != null && prenom.length > 0
+ * @invariant birthDate > '1900-01-01
  */
 public class Titulaire {
     private String firstName;
     private String lastName;
     private LocalDate birthDate;
+
+    public Titulaire(String firstName, String lastName, LocalDate birthDate) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthDate = birthDate;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -29,19 +34,19 @@ public class Titulaire {
         return birthDate;
     }
 
-    public void setFirstName(String firstName) {
-        if(firstName != null && firstName.length() > 0) {
+    private void setFirstName(String firstName) {
+        if (firstName != null && firstName.length() > 0) {
             this.firstName = firstName;
         }
     }
 
-    public void setLastName(String lastName) {
-        if((lastName != null) && lastName.length() > 0) this.lastName = lastName;
+    private void setLastName(String lastName) {
+        if ((lastName != null) && lastName.length() > 0) this.lastName = lastName;
     }
 
-    public void setBirthDate(LocalDate birthDate) {
-        LocalDate dateMin = LocalDate.of(1900,01,01);
-        if (birthDate.isAfter(dateMin))this.birthDate = birthDate;
+    private void setBirthDate(LocalDate birthDate) {
+        LocalDate dateMin = LocalDate.of(1900, 01, 01);
+        if (birthDate.isAfter(dateMin)) this.birthDate = birthDate;
 
     }
 

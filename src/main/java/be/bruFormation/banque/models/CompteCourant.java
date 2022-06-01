@@ -22,26 +22,44 @@ public class CompteCourant {
     private double creditLine;
 
     /**
+     * Construit un objet Compte courant
+     *
+     * @param number the number of the account
+     * @param owner  the owner of the Count
+     */
+    public CompteCourant(String number, Titulaire owner) {
+        this.number = number;
+        this.owner = owner;
+    }
+
+    /**
      * Methode permetant d'ajouter un montant au solde du compte
+     *
      * @param amount > 0
      * @modify this.solde | this.solde = this.solde + amount
      */
-    private void deposit (double amount){
-        if(amount <= 0)  return;
+    private void deposit(double amount) {
+        if (amount <= 0) return;
         this.solde += amount;
     }
 
     /**
      * Methode permetant de soustraire un montant au solde du compte
+     *
      * @param amount > 0
      * @modify this.solde |  this.solde = this.solde - amount ssi this.solde - amount >= -this.creditLine >=
      */
-    private void withdrawal(double amount){
-        if (amount <= 0)return;
+    private void withdrawal(double amount) {
+        if (amount <= 0) return;
         if (this.solde - amount >= -this.creditLine) return;
         this.solde += amount;
     }
 
+    /**
+     * Methode qui donne la valeur de l'attribue number
+     *
+     * @return le numedro du compte courrant
+     */
     public String getNumber() {
         return number;
     }
@@ -59,11 +77,12 @@ public class CompteCourant {
     }
 
     public void setNumber(String numero) {
-        if(number != null && number.length() > 0){
+        if (number != null && number.length() > 0) {
             this.number = numero;
         }
     }
-    public void setSolde(double solde) {
+
+    private void setSolde(double solde) {
         this.solde = solde;
     }
 
