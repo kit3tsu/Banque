@@ -28,8 +28,21 @@ public class CompteCourant {
      * @param owner  the owner of the Count
      */
     public CompteCourant(String number, Titulaire owner) {
-        this.number = number;
-        this.owner = owner;
+        setNumber(number);
+        setOwner(owner);
+    }
+
+    public CompteCourant(String number, Titulaire owner, double solde) {
+        setNumber(number);
+        setOwner(owner);
+        setSolde(solde);
+    }
+
+    public CompteCourant(String number, Titulaire owner, double solde, double creditLine) {
+        setNumber(number);
+        setOwner(owner);
+        setSolde(solde);
+        setCreditLine(creditLine);
     }
 
     /**
@@ -53,6 +66,10 @@ public class CompteCourant {
         if (amount <= 0) return;
         if (this.solde - amount >= -this.creditLine) return;
         this.solde += amount;
+    }
+
+    public void setOwner(Titulaire owner) {
+        this.owner = owner;
     }
 
     /**

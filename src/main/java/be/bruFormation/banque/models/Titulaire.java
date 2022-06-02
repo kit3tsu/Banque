@@ -17,9 +17,9 @@ public class Titulaire {
     private LocalDate birthDate;
 
     public Titulaire(String firstName, String lastName, LocalDate birthDate) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.birthDate = birthDate;
+        setFirstName(firstName);
+        setLastName(lastName);
+        setBirthDate(birthDate);
     }
 
     public String getFirstName() {
