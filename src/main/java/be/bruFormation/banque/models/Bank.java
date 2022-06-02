@@ -1,6 +1,9 @@
 package be.bruFormation.banque.models;
 
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -13,7 +16,7 @@ import java.util.Optional;
  */
 public class Bank {
     private String name;
-    private Map<String, CompteCourant> clients = new HashMap<String, CompteCourant>();
+    private Map<String, CurrentAccount> clients = new HashMap<String, CurrentAccount>();
 
     public Bank(String name) {
         this.setName(name);
@@ -29,12 +32,15 @@ public class Bank {
         this.name = name;
     }
 
-    public Map.Entry<String, CompteCourant>[] getClients() {
-        Map<String, CompteCourant> copy = new HashMap<String, CompteCourant>();
+    public Map.Entry<String, CurrentAccount>[] getClients() {
+        Map<String, CurrentAccount> copy = new HashMap<String, CurrentAccount>();
+        for (Map.Entry<String, CurrentAccount> entry : this.clients.entrySet()) {
+            copy.put(entry.getKey(), new CurrentAccount(entry.getValue()));
+        }
         return this.clients.entrySet().toArray(new Map.Entry[0]);
     }
 
-    private void add(CompteCourant account) {
+    private void add(CurrentAccount account) {
         if (!this.containAccount(account.getNumber())) return;
         clients.put(account.getNumber(), account);
     }
@@ -50,7 +56,7 @@ public class Bank {
      * @param number
      * @return compte tq existe un compte avec le numero number si non null
      */
-    public Optional<CompteCourant> get(String number) {
+    public Optional<CurrentAccount> get(String number) {
         if (containAccount(number)) {
             return Optional.ofNullable(clients.get(number));
         }
@@ -59,5 +65,26 @@ public class Bank {
 
     private boolean containAccount(String number) {
         return clients.containsKey(number);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("name", name)
+                .add("clients", clients)
+                .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Bank)) return false;
+        Bank bank = (Bank) o;
+        return Objects.equal(getName(), bank.getName()) && Objects.equal(getClients(), bank.getClients());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getName(), getClients());
     }
 }
