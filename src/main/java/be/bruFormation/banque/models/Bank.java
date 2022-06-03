@@ -31,7 +31,6 @@ public class Bank {
         if (name.length() <= 0) return;
         this.name = name;
     }
-
     public Map.Entry<String, CurrentAccount>[] getClients() {
         Map<String, CurrentAccount> copy = new HashMap<String, CurrentAccount>();
         for (Map.Entry<String, CurrentAccount> entry : this.clients.entrySet()) {

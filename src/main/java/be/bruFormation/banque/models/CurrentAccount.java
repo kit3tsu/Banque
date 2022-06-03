@@ -26,27 +26,20 @@ public class CurrentAccount extends Account {
      * @param owner  the owner of the Count
      */
     public CurrentAccount(String number, Titulaire owner) {
-        setNumber(number);
-        setOwner(owner);
+        super(number,owner);
     }
 
     public CurrentAccount(String number, Titulaire owner, double solde) {
-        setNumber(number);
-        setOwner(owner);
-        setSolde(solde);
+        super(number,owner,solde);
     }
 
     public CurrentAccount(String number, Titulaire owner, double solde, double creditLine) {
-        setNumber(number);
-        setOwner(owner);
-        setSolde(solde);
+        super(number,owner,solde);
         setCreditLine(creditLine);
     }
 
     public CurrentAccount(CurrentAccount account) {
-        this.number = account.getNumber();
-        this.solde = account.getSolde();
-        this.owner = account.getOwner();
+        super(account);
         this.creditLine = account.getCreditLine();
     }
 

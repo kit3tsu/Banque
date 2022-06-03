@@ -15,6 +15,20 @@ public class Account {
     private String number;
     private Titulaire owner;
     private double solde;
+    public Account(Account account){
+        this.solde = account.solde;
+        this.owner = account.owner;
+        this.number = account.number;
+    }
+    public Account(String number, Titulaire owner) {
+        setNumber(number);
+        setOwner(owner);
+    }
+    public Account(String number,Titulaire owner, double solde){
+        setNumber(number);
+        setOwner(owner);
+        setSolde(solde);
+    }
 
     public String getNumber() {
         return number;
@@ -59,5 +73,8 @@ public class Account {
     public void deposit(double amount) {
         if (amount <= 0) return;
         this.solde += amount;
+    }
+    public double sumAccount(Account secondAccount){
+        return  this.solde + secondAccount.getSolde();
     }
 }
