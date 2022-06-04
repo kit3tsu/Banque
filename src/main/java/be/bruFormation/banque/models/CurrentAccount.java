@@ -15,7 +15,7 @@ package be.bruFormation.banque.models;
  */
 public class CurrentAccount extends Account {
     private String number;
-    private Titulaire owner;
+    private Holder owner;
     private double solde;
     private double creditLine;
 
@@ -25,15 +25,15 @@ public class CurrentAccount extends Account {
      * @param number the number of the account
      * @param owner  the owner of the Count
      */
-    public CurrentAccount(String number, Titulaire owner) {
+    public CurrentAccount(String number, Holder owner) {
         super(number,owner);
     }
 
-    public CurrentAccount(String number, Titulaire owner, double solde) {
+    public CurrentAccount(String number, Holder owner, double solde) {
         super(number,owner,solde);
     }
 
-    public CurrentAccount(String number, Titulaire owner, double solde, double creditLine) {
+    public CurrentAccount(String number, Holder owner, double solde, double creditLine) {
         super(number,owner,solde);
         setCreditLine(creditLine);
     }
@@ -56,7 +56,7 @@ public class CurrentAccount extends Account {
         this.solde += amount;
     }
 
-    private void setOwner(Titulaire owner) {
+    private void setOwner(Holder owner) {
         this.owner = owner;
     }
 
@@ -83,7 +83,7 @@ public class CurrentAccount extends Account {
         if (this == o) return true;
         if (!(o instanceof CurrentAccount)) return false;
         CurrentAccount that = (CurrentAccount) o;
-        return Double.compare(that.getSolde(), getSolde()) == 0 && Double.compare(that.getCreditLine(), getCreditLine()) == 0 && getNumber().equals(that.getNumber()) && getOwner().equals(that.getOwner());
+        return Double.compare(that.getSolde(), getSolde()) == 0 && Double.compare(that.getCreditLine(), getCreditLine()) == 0 && getNumber().equals(that.getNumber()) && getHolder().equals(that.getHolder());
     }
 
 

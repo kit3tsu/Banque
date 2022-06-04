@@ -13,20 +13,20 @@ package be.bruFormation.banque.models;
  */
 public class Account {
     private String number;
-    private Titulaire owner;
+    private Holder holder;
     private double solde;
     public Account(Account account){
         this.solde = account.solde;
-        this.owner = account.owner;
+        this.holder = account.holder;
         this.number = account.number;
     }
-    public Account(String number, Titulaire owner) {
+    public Account(String number, Holder holder) {
         setNumber(number);
-        setOwner(owner);
+        setHolder(holder);
     }
-    public Account(String number,Titulaire owner, double solde){
+    public Account(String number, Holder holder, double solde){
         setNumber(number);
-        setOwner(owner);
+        setHolder(holder);
         setSolde(solde);
     }
 
@@ -40,12 +40,12 @@ public class Account {
         }
     }
 
-    public Titulaire getOwner() {
-        return owner;
+    public Holder getHolder() {
+        return holder;
     }
 
-    private void setOwner(Titulaire owner) {
-        this.owner = owner;
+    private void setHolder(Holder holder) {
+        this.holder = holder;
     }
 
     public double getSolde() {
