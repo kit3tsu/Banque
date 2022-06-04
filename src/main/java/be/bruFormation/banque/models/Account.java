@@ -1,15 +1,15 @@
 package be.bruFormation.banque.models;
 
 /**
- * Class mutable représentant un compt
- * FA : Account{number,solde}
+ * Mutable class representing an account that can go negative
+ * FA: Account{number, solde}
  *
- * @attribute number String -> format IBAN
- * @attribute owner Titulaire
- * @attribute solde double
- * @invariant number != null && number.length =19
- * @invariant owner != null
- * @invariant solde > -creditLine
+ * @attribute <b>number</b> {@link String String} => Format IBAN BEXX XXXX XXXX XXXX
+ * @attribute <b>solde</b> {@link Double double}
+ * @attribute <b>holder</b> {@link Holder Holder}
+ *
+ * @invariant number != null and numero.length = 19
+ * @invariant holder != null
  */
 public class Account {
     private String number;
@@ -29,46 +29,40 @@ public class Account {
         setHolder(holder);
         setSolde(solde);
     }
-
     public String getNumber() {
         return number;
     }
-
     private void setNumber(String number) {
         if (this.number != null && this.number.length() > 0) {
             this.number = number;
         }
     }
-
     public Holder getHolder() {
         return holder;
     }
-
     private void setHolder(Holder holder) {
         this.holder = holder;
     }
-
     public double getSolde() {
         return solde;
     }
-
     private void setSolde(double solde) {
         if (solde != 0) {
             this.solde = solde;
         }
     }
-
+    /**
+     * Procedure for withdrawing an amount from the account balance
+     * @param amount amount > 0
+     */
     public void withdrawal(double amount) {
         if (amount <= 0) return;
         if (this.solde - amount >= 0) return;
         this.solde += amount;
     }
-
     /**
-     * Methode permetant d'ajouter un montant au solde du compte
-     *
-     * @param amount > 0
-     * @modify this.solde | this.solde = this.solde + amount
+     * Procedure for depositing an amount to the account balance
+     * @param amount amount > 0
      */
     public void deposit(double amount) {
         if (amount <= 0) return;

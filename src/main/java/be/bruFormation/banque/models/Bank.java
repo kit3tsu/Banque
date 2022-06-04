@@ -1,89 +1,84 @@
 package be.bruFormation.banque.models;
 
-
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-
 /**
+ * Mutable class representing a set of accounts
+ * FA: Bank{name, qttAccount}
+ *
  * @attribute name String
- * @attribute client Map<Titulaire,List<CompteCourant>>
- * @invariant name != null && nom.length > 0 en Lecture seul
- * @invariant clients != null
+ * @attribute accounts Map | key=String && value= CurrentAccount
+ *
+ * @invariant name != null && name.length > 0
+ * @invariant accounts != null
  */
 public class Bank {
     private String name;
-    private Map<String, CurrentAccount> clients = new HashMap<String, CurrentAccount>();
-
+    private final Map<String,Account> ACCOUNTS = new HashMap<String,Account>();
     public Bank(String name) {
         this.setName(name);
     }
-
     public String getName() {
         return name;
     }
-
     private void setName(String name) {
         if (name != null) return;
         if (name.length() <= 0) return;
         this.name = name;
     }
-    public Map.Entry<String, CurrentAccount>[] getClients() {
-        Map<String, CurrentAccount> copy = new HashMap<String, CurrentAccount>();
-        for (Map.Entry<String, CurrentAccount> entry : this.clients.entrySet()) {
-            copy.put(entry.getKey(), new CurrentAccount(entry.getValue()));
+    public Map.Entry<String,Account>[] getAccounts() {
+        Map<String,Account> copy = new HashMap<String,Account>();
+        for (Map.Entry<String,Account> entry : this.ACCOUNTS.entrySet()) {
+            copy.put(entry.getKey(), new Account(entry.getValue()));
         }
-        return this.clients.entrySet().toArray(new Map.Entry[0]);
+        return this.ACCOUNTS.entrySet().toArray(new Map.Entry[0]);
     }
-
-    private void add(CurrentAccount account) {
+    /**
+     * Function to add an account in the bank
+     * @param account CurrentAccount
+     * @modify accounts tq accounts.length = accounts.length + 1
+     */
+    private void add(Account account) {
         if (!this.containAccount(account.getNumber())) return;
-        clients.put(account.getNumber(), account);
+        ACCOUNTS.put(account.getNumber(), account);
     }
-
     private void remove(String number) {
         if (!containAccount(number)) return;
-        clients.remove(number);
+        ACCOUNTS.remove(number);
     }
-
     /**
-     * Methode permettant la recupération d'un compte si il existe
-     *
-     * @param number
-     * @return compte tq existe un compte avec le numero number si non null
+     * Function allowing the recovery of an account if it exists
+     * @param number String
+     * @return account
      */
-    public Optional<CurrentAccount> get(String number) {
-        if (containAccount(number)) {
-            return Optional.ofNullable(clients.get(number));
+    public Optional<Account> get(String number) {
+        if (this.containAccount(number)) {
+            return Optional.ofNullable(ACCOUNTS.get(number));
         }
-        return null;
+        return Optional.empty();
     }
-
     private boolean containAccount(String number) {
-        return clients.containsKey(number);
+        return ACCOUNTS.containsKey(number);
     }
-
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("name", name)
-                .add("clients", clients)
+                .add("clients", ACCOUNTS)
                 .toString();
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Bank)) return false;
-        Bank bank = (Bank) o;
-        return Objects.equal(getName(), bank.getName()) && Objects.equal(getClients(), bank.getClients());
+        if (!(o instanceof Bank bank)) return false;
+        return Objects.equal(getName(), bank.getName()) && Objects.equal(getAccounts(), bank.getAccounts());
     }
-
     @Override
     public int hashCode() {
-        return Objects.hashCode(getName(), getClients());
+        return Objects.hashCode(getName(), getAccounts());
     }
 }
