@@ -4,7 +4,7 @@ import com.google.common.base.MoreObjects;
 
 import java.time.LocalDate;
 
-class SaveAccount extends Account {
+public class SaveAccount extends Account {
     private LocalDate lastWithdraw;
 
 

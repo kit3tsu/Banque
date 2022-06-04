@@ -11,12 +11,12 @@ import java.util.Objects;
  * @invariant lastName != null && prenom.length > 0
  * @invariant birthDate > '1900-01-01
  */
-public class Titulaire {
+public class Holder {
     private String firstName;
     private String lastName;
     private LocalDate birthDate;
 
-    public Titulaire(String firstName, String lastName, LocalDate birthDate) {
+    public Holder(String firstName, String lastName, LocalDate birthDate) {
         setFirstName(firstName);
         setLastName(lastName);
         setBirthDate(birthDate);
@@ -53,9 +53,9 @@ public class Titulaire {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Titulaire)) return false;
-        Titulaire titulaire = (Titulaire) o;
-        return getFirstName().equals(titulaire.getFirstName()) && getLastName().equals(titulaire.getLastName()) && getBirthDate().equals(titulaire.getBirthDate());
+        if (!(o instanceof Holder)) return false;
+        Holder holder = (Holder) o;
+        return getFirstName().equals(holder.getFirstName()) && getLastName().equals(holder.getLastName()) && getBirthDate().equals(holder.getBirthDate());
     }
 
     @Override
