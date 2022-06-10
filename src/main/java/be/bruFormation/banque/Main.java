@@ -21,18 +21,18 @@ public class Main {
         List<Holder> holderList = new ArrayList<>();
         List<Account> accountList = new ArrayList<>();
         getHolder(connection, holderList);
-        PreparedStatement statement = connection.prepareStatement("SELECT * FROM Compte");
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM Account");
         ResultSet resultSet = statement.executeQuery();
         Account account;
         while (resultSet.next()) {
-            String number = resultSet.getString("numero");
+            String number = resultSet.getString("number");
             double solde = resultSet.getDouble("solde");
             String desc = resultSet.getString("desc");
-            if (desc.equals("COURANT")) {
-                double creditLine = resultSet.getDouble("ligneCredit");
+            if (desc.equals("CURRENT")) {
+                double creditLine = resultSet.getDouble("credit_line");
                 account = new CurrentAccount(number, holderList.get(0), solde);
             } else {
-                Date date = resultSet.getDate("dateDernierRetrait");
+                Date date = resultSet.getDate("last_whithdrawan_date");
                 LocalDate dateLastWithdrawn = date.toLocalDate();
                 account = new SaveAccount(number, holderList.get(0), solde,dateLastWithdrawn);
             }
@@ -42,11 +42,11 @@ public class Main {
     }
 
     private static void getHolder(Connection connection, List<Holder> holderList) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement("SELECT * FROM Titulaire");
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM Holder");
         ResultSet resultSet = statement.executeQuery();
         while (resultSet.next()) {
-            String firstName = resultSet.getString("nom");
-            String lastName = resultSet.getString("prenom");
+            String firstName = resultSet.getString("last_name");
+            String lastName = resultSet.getString("first_name");
             Holder holder = new Holder(firstName, lastName);
             holderList.add(holder);
         }
