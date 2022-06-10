@@ -1,5 +1,7 @@
 package be.bruFormation.banque.models;
 
+import com.google.common.base.MoreObjects;
+
 import java.time.LocalDate;
 import java.util.Objects;
 /**
@@ -18,6 +20,9 @@ public class Holder {
     private String firstName;
     private String lastName;
     private LocalDate birthDate;
+    public Holder(String firstName, String lastName) {
+        this(firstName, lastName, LocalDate.of(1900, 1, 1));
+    }
     public Holder(String firstName, String lastName, LocalDate birthDate) {
         setFirstName(firstName);
         setLastName(lastName);
@@ -45,6 +50,16 @@ public class Holder {
         if (birthDate.isAfter(dateMin)) this.birthDate = birthDate;
 
     }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("firstName", firstName)
+                .add("lastName", lastName)
+                .add("birthDate", birthDate)
+                .toString();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

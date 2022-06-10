@@ -21,6 +21,12 @@ public class SaveAccount extends Account {
         super(account);
         this.dateLastWithdrawn = account.getLastWithdraw();
     }
+
+    public SaveAccount(String number, Holder holder, double solde, LocalDate dateLastWithdrawn) {
+        super(number,holder,solde);
+        this.dateLastWithdrawn = dateLastWithdrawn;
+    }
+
     public LocalDate getLastWithdraw() {
         return dateLastWithdrawn;
     }
@@ -34,8 +40,12 @@ public class SaveAccount extends Account {
     }
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("lastWithdraw", dateLastWithdrawn)
-                .toString();
+        StringBuilder builder = new StringBuilder("Saving{");
+
+        builder.append(super.toString());
+        builder.append("dateDernierRetrait= ").append(dateLastWithdrawn);
+
+        return builder.append("}").toString();
     }
+
 }

@@ -45,6 +45,16 @@ public class CurrentAccount extends Account {
         this.creditLine = creditLine;
     }
     @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder("Current{");
+
+        builder.append(super.toString());
+        builder.append("ligneCredit= ").append(creditLine);
+
+        return builder.append("}").toString();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof CurrentAccount)) return false;

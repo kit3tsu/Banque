@@ -33,7 +33,7 @@ public class Account {
         return number;
     }
     private void setNumber(String number) {
-        if (this.number != null && this.number.length() > 0) {
+        if (number != null && number.length() > 0) {
             this.number = number;
         }
     }
@@ -71,4 +71,15 @@ public class Account {
     public double sumAccount(Account secondAccount){
         return  this.solde + secondAccount.getSolde();
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("number= ").append(number).append(", ");
+        builder.append("solde= ").append(solde).append(", ");
+
+        return builder.toString();
+    }
+
 }
