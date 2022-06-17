@@ -16,6 +16,7 @@ public class Main {
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         System.out.println(DB_PATH);
+        System.out.println("BLOP");
         Class.forName("org.sqlite.JDBC");
         Connection connection = DriverManager.getConnection("jdbc:sqlite:" + DB_PATH);
         List<Holder> holderList = new ArrayList<>();
