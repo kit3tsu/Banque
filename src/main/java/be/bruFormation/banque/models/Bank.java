@@ -22,6 +22,7 @@ public class Bank {
     public Bank(String name) {
         this.setName(name);
     }
+    // TODO add copy constructor
     public String getName() {
         return name;
     }

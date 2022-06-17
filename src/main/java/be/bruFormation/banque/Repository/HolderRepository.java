@@ -20,7 +20,7 @@ public class HolderRepository extends Repository{
         super.open();
         List<Holder> holderList = new ArrayList<>();
         PreparedStatement statement = this.preparedStatement("SELECT * FROM Holder");
-        ResultSet resultSet = statement.executeQuery();
+        ResultSet resultSet = super.executeQuery(statement);
         while (resultSet.next()) {
             Holder holder = this.fromResultSet(resultSet);
             holderList.add(holder);
@@ -33,7 +33,7 @@ public class HolderRepository extends Repository{
         Holder holder;
         PreparedStatement statement = super.preparedStatement("SELECT * FROM Holder WHERE id = ? ");
         statement.setInt(1,id);
-        ResultSet resultSet = statement.executeQuery();
+        ResultSet resultSet = super.executeQuery(statement);
         holder = this.fromResultSet(resultSet);
         super.close();
         return holder;
