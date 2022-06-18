@@ -18,10 +18,21 @@ import java.util.Optional;
  */
 public class Bank {
     private String name;
+    private String swiftCode;
     private final Map<String,Account> ACCOUNTS = new HashMap<String,Account>();
     public Bank(String name) {
         this.setName(name);
+        this.swiftCode = setSwiftCode();
     }
+
+    private String setSwiftCode() {
+        String countryCode = "BE";
+        String bankCode = name.substring(0,4);
+        String cityCode = "BR";
+        String agencyCode = Integer.toString(this.hashCode()).substring(0,3);
+        return bankCode+countryCode+cityCode+agencyCode;
+    }
+
     // TODO add copy constructor
     public String getName() {
         return name;
@@ -84,6 +95,6 @@ public class Bank {
     }
 
     public String getSwiftCode() {
-        return ""; //TODO add swift code param
+        return  this.swiftCode;
     }
 }
