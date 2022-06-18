@@ -82,4 +82,8 @@ public class Bank {
     public int hashCode() {
         return Objects.hashCode(getName(), getAccounts());
     }
+
+    public String getSwiftCode() {
+        return ""; //TODO add swift code param
+    }
 }
