@@ -22,6 +22,7 @@ public class Bank {
     public Bank(String name) {
         this.setName(name);
     }
+    // TODO add copy constructor
     public String getName() {
         return name;
     }
@@ -80,5 +81,9 @@ public class Bank {
     @Override
     public int hashCode() {
         return Objects.hashCode(getName(), getAccounts());
+    }
+
+    public String getSwiftCode() {
+        return ""; //TODO add swift code param
     }
 }

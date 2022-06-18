@@ -70,4 +70,8 @@ public class Holder {
     public int hashCode() {
         return Objects.hash(getFirstName(), getLastName(), getBirthDate());
     }
+
+    public String getNatNumber() {
+        return ""; //TODO set up national number param
+    }
 }
