@@ -19,16 +19,16 @@ public class AccountRepository extends Repository {
         HolderRepository holderRepository = new HolderRepository();
         Account account;
         String number = resultSet.getString("number");
-        int holder_id = resultSet.getInt("holder_id");
+        int holderId = resultSet.getInt("holder_id");
         double solde = resultSet.getDouble("solde");
         String desc = resultSet.getString("desc");
         if (desc.equals("CURRENT")) {
             double creditLine = resultSet.getDouble("credit_line");
-            account = new CurrentAccount(number, holderRepository.findHolderById(holder_id), solde);
+            account = new CurrentAccount(number, holderRepository.findHolderById(holderId), solde);
         } else {
             Date date = resultSet.getDate("last_whithdrawan_date");
             LocalDate dateLastWithdrawn = date.toLocalDate();
-            account = new SaveAccount(number, holderRepository.findHolderById(holder_id), solde,dateLastWithdrawn);
+            account = new SaveAccount(number, holderRepository.findHolderById(holderId), solde,dateLastWithdrawn);
         }
         return  account;
     }
@@ -43,55 +43,62 @@ public class AccountRepository extends Repository {
         super.close();
         return accountList;
     }
-    public Account findAccountById(int account_id) throws SQLException {
+    public Account findAccountById(int accountId) throws SQLException {
         super.open();
         PreparedStatement statement = super.preparedStatement("SELECT * FROM Account WHERE ?");
-        statement.setInt(1,account_id);
+        statement.setInt(1,accountId);
         ResultSet resultSet = super.executeQuery(statement);
         super.close();
         return this.fromResultSet(resultSet);
     }
-    public void addAccount(Account account) throws SQLException {
-        super.open();
-//        String query = "INSERT INTO Account value((SELECT Max(student_id) FROM student)+1,?,?,?,?,?,?)";
-//        PreparedStatement statement = super.preparedStatement(query);
-//        statement.setString(1,account.getNumber());
-//        statement.setDouble(2,account.getSolde());
-//        statement.setInt(6, null);
-//        statement.setInt(7, null);
+    public void addAccount(Account account, String natNumber, String swift) throws SQLException {
+        HolderRepository hr = new HolderRepository();
+        BankRepository br = new BankRepository();
+        int holderId =  hr.findHolderIdByNationalNumber(natNumber);
+        int bankId = br.findBankIdBySwift(swift);
         if (account instanceof CurrentAccount ){
-            this.addCurrentAccount((CurrentAccount) account);
+            this.addCurrentAccount((CurrentAccount) account,holderId,bankId);
         }else {
-            this.addSaveAccount((SaveAccount) account);
+            this.addSaveAccount((SaveAccount) account,holderId,bankId);
         }
-        super.close();
     }
-    private void addCurrentAccount(CurrentAccount account) throws SQLException {
+    private void addCurrentAccount(CurrentAccount account, int holderId, int bankId) throws SQLException {
+        HolderRepository hr = new HolderRepository();
+        BankRepository br = new BankRepository();
         super.open();
-        String query = "INSERT INTO Account value((SELECT Max(student_id) FROM student)+1,?,?,?,NULL,CURRENT,?,?)";
+        String query = "INSERT INTO Account value((SELECT Max(account_id) FROM Account)+1,?,?,?,NULL,CURRENT,?,?)";
         PreparedStatement statement = super.preparedStatement(query);
         statement.setString(1,account.getNumber());
         statement.setDouble(2,account.getSolde());
         statement.setDouble(3,account.getCreditLine());
-        statement.setInt(4, null);
-        statement.setInt(5, null);
-        // TODO getHolderID in HolderRepository
-        // TODO getBankID in BankRepository
+        statement.setInt(4, holderId);
+        statement.setInt(5, bankId);
         ResultSet resultSet = super.executeQuery(statement);
         super.close();
     }
-    private void addSaveAccount(SaveAccount account) throws SQLException {
+    private void addSaveAccount(SaveAccount account, int holderId, int bankId) throws SQLException {
         super.open();
-        String query = "INSERT INTO Account value((SELECT Max(student_id) FROM student)+1,?,?,NULL,?,SAVING,?,?)";
+        String query = "INSERT INTO Account value((SELECT Max(account_id) FROM Account)+1,?,?,NULL,?,SAVING,?,?)";
         PreparedStatement statement = super.preparedStatement(query);
         statement.setString(1,account.getNumber());
         statement.setDouble(2,account.getSolde());
         statement.setDate(3, Date.valueOf(account.getLastWithdraw()));
-        statement.setInt(4, null);
-        statement.setInt(5, null);
+        statement.setInt(4, holderId);
+        statement.setInt(5, bankId);
         ResultSet resultSet = super.executeQuery(statement);
-        // TODO getHolderID in HolderRepository
-        // TODO getBankID in BankRepository
         super.close();
+    }
+    public List<Account> findAllAccountOfTheBankById(int bankId) throws SQLException {
+        AccountRepository accountRepository = new AccountRepository();
+        super.open();
+        List<Account> accountList = new ArrayList<>();
+        PreparedStatement statement = super.preparedStatement("SELECT * FROM Account WHERE bank_id = ?");
+        statement.setInt(1,bankId);
+        ResultSet resultSet = super.executeQuery(statement);
+        while (resultSet.next()) {
+            accountList.add(this.fromResultSet(resultSet));
+        }
+        super.close();
+        return accountList;
     }
 }

@@ -2,6 +2,7 @@ package be.bruFormation.banque.Repository;
 
 import be.bruFormation.banque.models.Account;
 import be.bruFormation.banque.models.Bank;
+import be.bruFormation.banque.models.Holder;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -42,20 +43,24 @@ public class BankRepository extends Repository {
         super.close();
         return Bank;
     }
-
-    private List<Account> findAllAccountOfTheBankById(int bank_id) throws SQLException {
-        AccountRepository accountRepository = new AccountRepository();
+    public int findBankIdBySwift(String swift) throws SQLException {
         super.open();
-        List<Account> accountList = new ArrayList<>();
-        PreparedStatement statement = super.preparedStatement("SELECT * FROM Account WHERE bank_id = ?");
-        statement.setInt(1,bank_id);
-        ResultSet resultSet = super.executeQuery(statement);
-        while (resultSet.next()) {
-            accountList.add(accountRepository.fromResultSet(resultSet));
-        }
-        super.close();
-        return accountList;
-    }
 
+        PreparedStatement statement = super.preparedStatement("SELECT id FROM Bank WHERE swift_number = ? ");
+        statement.setString(1, swift);
+        ResultSet resultSet = super.executeQuery(statement);
+        int id = resultSet.getInt("id");
+        super.close();
+        return id;
+    }
+    public void addBank(Bank bank) throws SQLException {
+        super.open();
+        String query = "INSERT INTO Account value((SELECT Max(bank_id) FROM Bank)+1,?,?)";
+        PreparedStatement statement = super.preparedStatement(query);
+        statement.setString(1,bank.getName());
+        statement.setString(2,bank.getSwiftCode());
+        ResultSet resultSet = super.executeQuery(statement);
+        super.close();
+    }
 
 }
