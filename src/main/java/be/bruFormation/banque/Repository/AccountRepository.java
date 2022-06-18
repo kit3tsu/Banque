@@ -20,13 +20,13 @@ public class AccountRepository extends Repository {
         Account account;
         String number = resultSet.getString("number");
         int holderId = resultSet.getInt("holder_id");
-        double solde = resultSet.getDouble("solde");
+        double solde = resultSet.getDouble("sold");
         String desc = resultSet.getString("desc");
         if (desc.equals("CURRENT")) {
             double creditLine = resultSet.getDouble("credit_line");
             account = new CurrentAccount(number, holderRepository.findHolderById(holderId), solde);
         } else {
-            Date date = resultSet.getDate("last_whithdrawan_date");
+            Date date = resultSet.getDate("last_withdrawn_date");
             LocalDate dateLastWithdrawn = date.toLocalDate();
             account = new SaveAccount(number, holderRepository.findHolderById(holderId), solde,dateLastWithdrawn);
         }
