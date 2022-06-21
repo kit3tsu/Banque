@@ -26,11 +26,11 @@ public class Bank {
     }
 
     private String setSwiftCode() {
-        String countryCode = "BE";
         String bankCode = name.substring(0,4);
-        String cityCode = "BR";
+        String countryCode = "BE";
+        String locationCode = "BR";
         String agencyCode = Integer.toString(this.hashCode()).substring(0,3);
-        return bankCode+countryCode+cityCode+agencyCode;
+        return bankCode+countryCode+locationCode+agencyCode;
     }
 
     // TODO add copy constructor

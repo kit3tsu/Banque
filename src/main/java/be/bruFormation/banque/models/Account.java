@@ -37,6 +37,34 @@ public class Account {
             this.number = number;
         }
     }
+    private String setNumber(int bankCode){
+        String iban ;
+        String countryCode = "BE";
+        int bban = this.hashCode()*1000 + bankCode;
+        String controlKey = generateControlKey(countryCode,bban);
+        iban = countryCode + controlKey + Integer.toString(bban);
+        return iban;
+    }
+
+    private String generateControlKey(String countryCode, int bban) {
+        int countryCodeNumber = 0;
+        int cpt = countryCode.length() - 1;
+        int controlKey = bban* (100^cpt);
+        for (int i = 0  ;  i < countryCode.length(); i++) {
+            char c = countryCode.charAt(i);
+            int posCesarNine = ((int) c - (int) 'A') + 10;
+            countryCodeNumber += posCesarNine * (100^cpt);
+            cpt --;
+        }
+        controlKey +=countryCodeNumber;
+        controlKey %=97;
+        if(controlKey >= 10){
+            return Integer.toString(controlKey);
+        }else {
+            return "0"+Integer.toString(controlKey);
+        }
+    }
+
     public Holder getHolder() {
         return holder;
     }

@@ -16,6 +16,7 @@ public class Main {
         AccountRepository accountRepository = new AccountRepository();
         List<Account> accountList = accountRepository.findAllAccount();
         System.out.println(accountList);
+        System.out.println(accountList.get(0).hashCode());
     }
 
 }
