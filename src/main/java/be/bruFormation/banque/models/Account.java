@@ -37,13 +37,13 @@ public class Account {
             this.number = number;
         }
     }
-    private String setNumber(int bankCode){
+    private void generateNumber(int bankCode){
         String iban ;
         String countryCode = "BE";
         int bban = this.hashCode()*1000 + bankCode;
         String controlKey = generateControlKey(countryCode,bban);
         iban = countryCode + controlKey + Integer.toString(bban);
-        return iban;
+        this.setNumber(iban);
     }
 
     private String generateControlKey(String countryCode, int bban) {
