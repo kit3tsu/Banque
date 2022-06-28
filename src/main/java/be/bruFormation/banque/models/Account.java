@@ -33,9 +33,14 @@ public class Account {
         return number;
     }
     private void setNumber(String number) {
-        if (number != null && number.length() > 0) {
+        if (number.length() == 0) {
             this.number = number;
         }
+    }
+    public boolean changeNumber(String number){
+        String oldNumber = this.getNumber();
+        this.setNumber(number);
+        return !(oldNumber == this.getNumber());
     }
     private void generateNumber(int bankCode){
         String iban ;
