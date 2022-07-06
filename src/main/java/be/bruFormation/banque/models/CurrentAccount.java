@@ -11,6 +11,7 @@ package be.bruFormation.banque.models;
  */
 public class CurrentAccount extends Account {
     private double creditLine;
+    private IOverdraft overdraft;
     /**
      * Construit un objet Compte courant
      *
@@ -37,12 +38,24 @@ public class CurrentAccount extends Account {
     public void withdrawal(double amount) {
         if (getSolde() - amount >= -this.creditLine) return;
         super.withdrawal(amount);
+        trigerOverdraftEvent();
     }
+
+    private void trigerOverdraftEvent() {
+        if(getSolde()<0){
+            overdraft.overdraftTriger(this);
+        }
+    }
+
     public double getCreditLine() {
         return creditLine;
     }
     private void setCreditLine(double creditLine) {
         this.creditLine = creditLine;
+    }
+    public Account setOverdraftAction(IOverdraft action){
+        this.overdraft = action;
+        return this;
     }
     @Override
     public String toString() {
