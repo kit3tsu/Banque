@@ -1,5 +1,7 @@
 package be.bruFormation.banque.models;
 
+import com.google.common.base.Objects;
+
 /**
  * Mutable class representing an account that can go negative
  * FA: Account{number, solde}
@@ -33,40 +35,51 @@ public class Account {
         return number;
     }
     private void setNumber(String number) {
-        if (number.length() == 0) {
-            this.number = number;
-        }
+//        if (number.length() == 19) {
+//            this.number = number;
+//        }
+        this.number = number;
     }
-    public boolean changeNumber(String number){
+    public boolean numberHasChanged(String number){
         String oldNumber = this.getNumber();
         this.setNumber(number);
-        return !(oldNumber == this.getNumber());
+        return !(oldNumber.equals(this.getNumber()));
     }
-    private void generateNumber(int bankCode){
+    public void generateNumber(int bankCode){
         String iban ;
         String countryCode = "BE";
-        int bban = this.hashCode()*1000 + bankCode;
+        long bban =getBBan(bankCode);
         String controlKey = generateControlKey(countryCode,bban);
-        iban = countryCode + controlKey + Integer.toString(bban);
+        iban = countryCode + controlKey + Long.toString(bban);
         this.setNumber(iban);
     }
 
-    private String generateControlKey(String countryCode, int bban) {
+    public long getBBan(int bankCode){
+        long bban = (long) (this.hashCode() + (bankCode * Math.pow(10,9)));
+        return bban;
+    }
+
+    public String generateControlKey(String countryCode, long bban) {
         int countryCodeNumber = 0;
-        int cpt = countryCode.length() - 1;
-        int controlKey = bban* (100^cpt);
+        int cpt = countryCode.length() ;
+        int space = (int) Math.pow(100,cpt);
+        long controlKey = bban * space;
         for (int i = 0  ;  i < countryCode.length(); i++) {
             char c = countryCode.charAt(i);
             int posCesarNine = ((int) c - (int) 'A') + 10;
-            countryCodeNumber += posCesarNine * (100^cpt);
+            int offset =(int) Math.pow(100,cpt-1);
+            countryCodeNumber += posCesarNine *offset;
             cpt --;
         }
         controlKey +=countryCodeNumber;
+        controlKey *=100;
         controlKey %=97;
+        controlKey = 98 - controlKey;
+
         if(controlKey >= 10){
-            return Integer.toString(controlKey);
+            return Long.toString(controlKey);
         }else {
-            return "0"+Integer.toString(controlKey);
+            return "0"+Long.toString(controlKey);
         }
     }
 
@@ -90,8 +103,8 @@ public class Account {
      */
     public void withdrawal(double amount) {
         if (amount <= 0) return;
-        if (this.solde - amount >= 0) return;
-        this.solde += amount;
+        if (this.solde - amount < 0) return;
+        this.solde -= amount;
     }
     /**
      * Procedure for depositing an amount to the account balance
@@ -115,4 +128,16 @@ public class Account {
         return builder.toString();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Account)) return false;
+        Account account = (Account) o;
+        return Double.compare(account.getSolde(), getSolde()) == 0 && Objects.equal(getNumber(), account.getNumber()) && Objects.equal(getHolder(), account.getHolder());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getNumber(), getHolder(), getSolde());
+    }
 }

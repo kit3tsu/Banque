@@ -36,7 +36,7 @@ public class CurrentAccount extends Account {
      * @see Account#withdrawal
      */
     public void withdrawal(double amount) {
-        if (getSolde() - amount >= -this.creditLine) return;
+        if ((this.getSolde() - amount) < (-this.creditLine)) return;
         super.withdrawal(amount);
         trigerOverdraftEvent();
     }
