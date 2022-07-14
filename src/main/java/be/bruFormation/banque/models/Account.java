@@ -45,41 +45,43 @@ public class Account {
         this.setNumber(number);
         return !(oldNumber.equals(this.getNumber()));
     }
-    public void generateNumber(int bankCode){
+    public void generateNumber(String bankCode){
         String iban ;
         String countryCode = "BE";
-        long bban =getBBan(bankCode);
+        String bban =getBBan(bankCode);
         String controlKey = generateControlKey(countryCode,bban);
-        iban = countryCode + controlKey + Long.toString(bban);
+        iban = countryCode + controlKey + bban;
+       iban = splitIban(iban);
         this.setNumber(iban);
     }
 
-    public long getBBan(int bankCode){
-        long bban = (long) (this.hashCode() + (bankCode * Math.pow(10,9)));
-        return bban;
+    private String splitIban(String iban) {
+        iban =iban.replaceAll("(.{4})", "$1 ");
+        return iban.substring(0,iban.length()-1);
     }
 
-    public String generateControlKey(String countryCode, long bban) {
-        int countryCodeNumber = 0;
-        int cpt = countryCode.length() ;
-        int space = (int) Math.pow(100,cpt);
-        long controlKey = bban * space;
+    private String getBBan(String bankCode){
+        //String bban = Integer.toString(this.hashCode()) + bankCode ;
+        //return bban;
+        return "510007547" + bankCode;
+    }
+
+    public String generateControlKey(String countryCode, String bban) {
+        String countryCodeNumber = "";
+        String controlKey = bban;
         for (int i = 0  ;  i < countryCode.length(); i++) {
             char c = countryCode.charAt(i);
             int posCesarNine = ((int) c - (int) 'A') + 10;
-            int offset =(int) Math.pow(100,cpt-1);
-            countryCodeNumber += posCesarNine *offset;
-            cpt --;
+            countryCodeNumber += Integer.toString(posCesarNine) ;
         }
-        controlKey +=countryCodeNumber;
-        controlKey *=100;
-        controlKey %=97;
-        controlKey = 98 - controlKey;
-
-        if(controlKey >= 10){
-            return Long.toString(controlKey);
+        controlKey += countryCodeNumber +"00";
+        long control = Long.parseLong(controlKey);
+        control %=97;
+        control = 98 - control;
+        if(control >= 10){
+            return Long.toString(control);
         }else {
-            return "0"+Long.toString(controlKey);
+            return "0"+Long.toString(control);
         }
     }
 

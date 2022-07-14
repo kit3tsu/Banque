@@ -73,8 +73,8 @@ class AccountTest {
 
     @Test
     void testGenerateNumber(){
-        current.generateNumber(510);
-        assertEquals("BE62510007547061",current.getNumber());
+        current.generateNumber("061");
+        assertEquals("BE62 5100 0754 7061",current.getNumber());
     }
 
 }
