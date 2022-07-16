@@ -1,6 +1,11 @@
 package be.bruFormation.banque.models;
 
+import be.bruFormation.banque.utils.Observable;
+import be.bruFormation.banque.utils.Observer;
 import com.google.common.base.Objects;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Mutable class representing an account that can go negative
@@ -11,9 +16,9 @@ import com.google.common.base.Objects;
  * @invariant creditLine >= 0
  * @see be.bruFormation.banque.models.Account
  */
-public class CurrentAccount extends Account {
+public class CurrentAccount extends Account  {
     private double creditLine;
-    private IOverdraft overdraft;
+
     /**
      * Construit un objet Compte courant
      *
@@ -23,11 +28,11 @@ public class CurrentAccount extends Account {
     public CurrentAccount(String bankCode, Holder owner) {
         super(bankCode,owner);
     }
-    public CurrentAccount(String bankCode, Holder owner, double solde) {
-        super(bankCode,owner,solde);
+    public CurrentAccount(String bankCode, Holder owner, double sold) {
+        super(bankCode,owner,sold);
     }
-    public CurrentAccount(String bankCode, Holder owner, double solde, double creditLine) {
-        super(bankCode,owner,solde);
+    public CurrentAccount(String bankCode, Holder owner, double sold, double creditLine) {
+        super(bankCode,owner,sold);
         setCreditLine(creditLine);
     }
     public CurrentAccount(CurrentAccount account) {
@@ -40,32 +45,21 @@ public class CurrentAccount extends Account {
     public void withdrawal(double amount) {
         if ((this.getSolde() - amount) < (-this.creditLine)) return;
         super.withdrawal(amount);
-        trigerOverdraftEvent();
     }
-
-    private void trigerOverdraftEvent() {
-        if(getSolde()<0){
-            overdraft.overdraftTriger(this);
-        }
-    }
-
     public double getCreditLine() {
         return creditLine;
     }
     private void setCreditLine(double creditLine) {
         this.creditLine = creditLine;
     }
-    public Account setOverdraftAction(IOverdraft action){
-        this.overdraft = action;
-        return this;
-    }
+
     //region toString equals and hashCode
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder("Current{");
 
         builder.append(super.toString());
-        builder.append("ligneCredit= ").append(creditLine);
+        builder.append("creditLine= ").append(creditLine);
 
         return builder.append("}").toString();
     }
@@ -78,7 +72,8 @@ public class CurrentAccount extends Account {
     }
     @Override
     public int hashCode() {
-        return Objects.hashCode(super.hashCode(), getCreditLine(), overdraft);
+        return Objects.hashCode(super.hashCode(), getCreditLine());
     }
     //endregion
+
 }

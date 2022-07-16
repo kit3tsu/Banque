@@ -1,6 +1,11 @@
 package be.bruFormation.banque.models;
 
+import be.bruFormation.banque.utils.Observable;
+import be.bruFormation.banque.utils.Observer;
 import com.google.common.base.Objects;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Mutable class representing an account that can go negative
@@ -13,12 +18,13 @@ import com.google.common.base.Objects;
  * @invariant number != null and numero.length = 19
  * @invariant holder != null
  */
-public abstract class Account {
+public abstract class Account implements Observable {
     private String number;
     private Holder holder;
-    private double solde;
+    private double sold;
+    private final List<Observer> observers = new ArrayList<>();
     public Account(Account account){
-        this.solde = account.solde;
+        this.sold = account.sold;
         this.holder = account.holder;
         this.number = account.number;
     }
@@ -26,10 +32,10 @@ public abstract class Account {
         generateNumber(bankCode);
         setHolder(holder);
     }
-    public Account(String bankCode, Holder holder, double solde){
+    public Account(String bankCode, Holder holder, double sold){
         generateNumber(bankCode);
         setHolder(holder);
-        setSolde(solde);
+        setSolde(sold);
     }
     //region Getter Setter
     public String getNumber() {
@@ -48,11 +54,11 @@ public abstract class Account {
         this.holder = holder;
     }
     public double getSolde() {
-        return solde;
+        return sold;
     }
-    private void setSolde(double solde) {
-        if (solde != 0) {
-            this.solde = solde;
+    private void setSolde(double sold) {
+        if (sold != 0) {
+            this.sold = sold;
         }
     }
     //endregion
@@ -112,8 +118,8 @@ public abstract class Account {
      */
     public void withdrawal(double amount) {
         if (amount <= 0) return;
-        if (this.solde - amount < 0) return;
-        this.solde -= amount;
+        if (this.sold - amount < 0) return;
+        this.sold -= amount;
     }
     /**
      * Procedure for depositing an amount to the account balance
@@ -121,19 +127,37 @@ public abstract class Account {
      */
     public void deposit(double amount) {
         if (amount <= 0) return;
-        this.solde += amount;
+        this.sold += amount;
     }
     public double sumAccount(Account secondAccount){
-        return  this.solde + secondAccount.getSolde();
+        return  this.sold + secondAccount.getSolde();
     }
-//TODO generte IBAN
+    //region Observable methode
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers(Object o) {
+        for ( Observer observer: observers) {
+            observer.update(o);
+        }
+    }
+    //endregion
+    //TODO generte IBAN
     //region Override methode from Class Object
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
 
         builder.append("number= ").append(number).append(", ");
-        builder.append("solde= ").append(solde).append(", ");
+        builder.append("solde= ").append(sold).append(", ");
 
         return builder.toString();
     }
