@@ -1,5 +1,6 @@
 package be.bruFormation.banque.models;
 
+import be.bruFormation.banque.utils.Observer;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
@@ -16,7 +17,7 @@ import java.util.Optional;
  * @invariant name != null && name.length > 0
  * @invariant accounts != null
  */
-public class Bank {
+public class Bank implements Observer {
     private String name;
     private String swiftCode;
     private final Map<String,Account> ACCOUNTS = new HashMap<String,Account>();
@@ -100,5 +101,13 @@ public class Bank {
 
     public String getSwiftCode() {
         return  this.swiftCode;
+    }
+
+    @Override
+    public void update(Object o) {
+        if(o instanceof Account){
+            Account account = (Account) o;
+            // TODO notify holder that his account have ...
+        }
     }
 }
