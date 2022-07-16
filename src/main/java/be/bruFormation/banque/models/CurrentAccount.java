@@ -1,5 +1,7 @@
 package be.bruFormation.banque.models;
 
+import com.google.common.base.Objects;
+
 /**
  * Mutable class representing an account that can go negative
  * FA: CurrentAccount{number, balance, creditLine}
@@ -15,17 +17,17 @@ public class CurrentAccount extends Account {
     /**
      * Construit un objet Compte courant
      *
-     * @param number the number of the account
+     * @param bankCode the number of the account
      * @param owner  the owner of the Count
      */
-    public CurrentAccount(String number, Holder owner) {
-        super(number,owner);
+    public CurrentAccount(String bankCode, Holder owner) {
+        super(bankCode,owner);
     }
-    public CurrentAccount(String number, Holder owner, double solde) {
-        super(number,owner,solde);
+    public CurrentAccount(String bankCode, Holder owner, double solde) {
+        super(bankCode,owner,solde);
     }
-    public CurrentAccount(String number, Holder owner, double solde, double creditLine) {
-        super(number,owner,solde);
+    public CurrentAccount(String bankCode, Holder owner, double solde, double creditLine) {
+        super(bankCode,owner,solde);
         setCreditLine(creditLine);
     }
     public CurrentAccount(CurrentAccount account) {
@@ -57,6 +59,7 @@ public class CurrentAccount extends Account {
         this.overdraft = action;
         return this;
     }
+    //region toString equals and hashCode
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder("Current{");
@@ -66,7 +69,6 @@ public class CurrentAccount extends Account {
 
         return builder.append("}").toString();
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -74,4 +76,9 @@ public class CurrentAccount extends Account {
         CurrentAccount account = (CurrentAccount) o;
         return Double.compare(account.getSolde(), getSolde()) == 0 && Double.compare(account.getCreditLine(), getCreditLine()) == 0 && getNumber().equals(account.getNumber()) && getHolder().equals(account.getHolder());
     }
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(super.hashCode(), getCreditLine(), overdraft);
+    }
+    //endregion
 }

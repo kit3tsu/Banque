@@ -22,12 +22,12 @@ public abstract class Account {
         this.holder = account.holder;
         this.number = account.number;
     }
-    public Account(String number, Holder holder) {
-        setNumber(number);
+    public Account(String bankCode, Holder holder) {
+        generateNumber(bankCode);
         setHolder(holder);
     }
-    public Account(String number, Holder holder, double solde){
-        setNumber(number);
+    public Account(String bankCode, Holder holder, double solde){
+        generateNumber(bankCode);
         setHolder(holder);
         setSolde(solde);
     }
@@ -62,16 +62,22 @@ public abstract class Account {
         return !(oldNumber.equals(this.getNumber()));
     }
     public void generateNumber(String bankCode){
-        String iban ;
-        String countryCode = "BE";
-        String bban =getBBan(bankCode);
-        String controlKey = generateControlKey(countryCode,bban);
-        iban = countryCode + controlKey + bban;
-       iban = splitIban(iban);
-        this.setNumber(iban);
+        if(validateBankCode(bankCode)) {
+            String iban;
+            String countryCode = "BE";
+            String bban = getBBan(bankCode);
+            String controlKey = generateControlKey(countryCode, bban);
+            iban = countryCode + controlKey + bban;
+            iban = formatIban(iban);
+            this.setNumber(iban);
+        }
     }
 
-    private String splitIban(String iban) {
+    private boolean validateBankCode(String bankCode) {
+        return bankCode.length()==3;
+    }
+
+    private String formatIban(String iban) {
         iban =iban.replaceAll("(.{4})", "$1 ");
         return iban.substring(0,iban.length()-1);
     }
