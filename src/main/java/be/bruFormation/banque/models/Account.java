@@ -23,16 +23,16 @@ public abstract class Account implements Observable {
     private Holder holder;
     private double sold;
     private final List<Observer> observers = new ArrayList<>();
-    public Account(Account account){
+    Account(Account account){
         this.sold = account.sold;
         this.holder = account.holder;
         this.number = account.number;
     }
-    public Account(String bankCode, Holder holder) {
+    Account(String bankCode, Holder holder) {
         generateNumber(bankCode);
         setHolder(holder);
     }
-    public Account(String bankCode, Holder holder, double sold){
+    Account(String bankCode, Holder holder, double sold){
         generateNumber(bankCode);
         setHolder(holder);
         setSolde(sold);

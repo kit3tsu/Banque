@@ -20,21 +20,26 @@ import java.util.Optional;
 public class Bank implements Observer {
     private String name;
     private String swiftCode;
+    private String bankCode;
     private final Map<String,Account> ACCOUNTS = new HashMap<String,Account>();
     public Bank(String name) {
         this.setName(name);
-        this.swiftCode = setSwiftCode();
+        generateBankCode();
+        this.swiftCode = generateSwiftCode();
     }
-
-    private String setSwiftCode() {
-        String bankCode = name.substring(0,4);
+    public SaveAccount creatSaveAccount(Holder holder, double sold){
+        return new SaveAccount(this.bankCode, holder,sold);
+    }
+    public CurrentAccount creatCurrentAccount(Holder holder, double sold){
+        return new CurrentAccount(this.bankCode, holder,sold);
+    }
+    // TODO add copy constructor
+    private String generateSwiftCode() {
         String countryCode = "BE";
         String locationCode = "BR";
         String agencyCode = Integer.toString(this.hashCode()).substring(0,3);
         return bankCode+countryCode+locationCode+agencyCode;
     }
-
-    // TODO add copy constructor
     public String getName() {
         return name;
     }
@@ -43,6 +48,15 @@ public class Bank implements Observer {
         if (name.length() <= 0) return;
         this.name = name;
     }
+
+    public String getBankCode() {
+        return bankCode;
+    }
+
+    public void generateBankCode() {
+        this.bankCode = Integer.toString(this.hashCode()).substring(3,7);
+    }
+
     public Map.Entry<String,Account>[] getAccounts() {
         Map<String,Account> copy = new HashMap<String,Account>();
         for (Map.Entry<String,Account> entry : this.ACCOUNTS.entrySet()) {

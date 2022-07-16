@@ -25,17 +25,17 @@ public class CurrentAccount extends Account  {
      * @param bankCode the number of the account
      * @param owner  the owner of the Count
      */
-    public CurrentAccount(String bankCode, Holder owner) {
+    CurrentAccount(String bankCode, Holder owner) {
         super(bankCode,owner);
     }
-    public CurrentAccount(String bankCode, Holder owner, double sold) {
+    CurrentAccount(String bankCode, Holder owner, double sold) {
         super(bankCode,owner,sold);
     }
-    public CurrentAccount(String bankCode, Holder owner, double sold, double creditLine) {
+    CurrentAccount(String bankCode, Holder owner, double sold, double creditLine) {
         super(bankCode,owner,sold);
         setCreditLine(creditLine);
     }
-    public CurrentAccount(CurrentAccount account) {
+    CurrentAccount(CurrentAccount account) {
         super(account);
         this.creditLine = account.getCreditLine();
     }

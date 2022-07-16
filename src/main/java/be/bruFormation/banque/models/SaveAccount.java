@@ -14,16 +14,20 @@ import java.time.LocalDate;
 
 public class SaveAccount extends Account {
     private LocalDate dateLastWithdrawn;
-    public SaveAccount(String bankCode, Holder holder, double solde) {
+    SaveAccount(String bankCode, Holder holder, double solde) {
         super(bankCode,holder,solde);
     }
-    public SaveAccount(SaveAccount account) {
+    SaveAccount(SaveAccount account) {
         super(account);
         this.dateLastWithdrawn = account.getLastWithdraw();
     }
 
-    public SaveAccount(String bankCode, Holder holder, double solde, LocalDate dateLastWithdrawn) {
+    SaveAccount(String bankCode, Holder holder, double solde, LocalDate dateLastWithdrawn) {
         super(bankCode,holder,solde);
+        this.dateLastWithdrawn = dateLastWithdrawn;
+    }
+
+    public void setDateLastWithdrawn(LocalDate dateLastWithdrawn) {
         this.dateLastWithdrawn = dateLastWithdrawn;
     }
 

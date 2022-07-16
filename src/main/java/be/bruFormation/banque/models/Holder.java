@@ -31,6 +31,7 @@ public class Holder {
         this.nationalNumber = generateNationalNumber(birthDate);
     }
 
+
     private String generateNationalNumber(LocalDate birthDate) {
         String firstHalf = birthDate.toString().substring(0,6);
         String secondHalf = Integer.toString(this.hashCode()).substring(0,5);
