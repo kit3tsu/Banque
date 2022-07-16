@@ -1,5 +1,12 @@
 package be.bruFormation.banque.models;
 
+import be.bruFormation.banque.utils.Observable;
+import be.bruFormation.banque.utils.Observer;
+import com.google.common.base.Objects;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Mutable class representing an account that can go negative
  * FA: CurrentAccount{number, balance, creditLine}
@@ -9,25 +16,26 @@ package be.bruFormation.banque.models;
  * @invariant creditLine >= 0
  * @see be.bruFormation.banque.models.Account
  */
-public class CurrentAccount extends Account {
+public class CurrentAccount extends Account  {
     private double creditLine;
+
     /**
      * Construit un objet Compte courant
      *
-     * @param number the number of the account
+     * @param bankCode the number of the account
      * @param owner  the owner of the Count
      */
-    public CurrentAccount(String number, Holder owner) {
-        super(number,owner);
+    CurrentAccount(String bankCode, Holder owner) {
+        super(bankCode,owner);
     }
-    public CurrentAccount(String number, Holder owner, double solde) {
-        super(number,owner,solde);
+    CurrentAccount(String bankCode, Holder owner, double sold) {
+        super(bankCode,owner,sold);
     }
-    public CurrentAccount(String number, Holder owner, double solde, double creditLine) {
-        super(number,owner,solde);
+    CurrentAccount(String bankCode, Holder owner, double sold, double creditLine) {
+        super(bankCode,owner,sold);
         setCreditLine(creditLine);
     }
-    public CurrentAccount(CurrentAccount account) {
+    CurrentAccount(CurrentAccount account) {
         super(account);
         this.creditLine = account.getCreditLine();
     }
@@ -35,7 +43,7 @@ public class CurrentAccount extends Account {
      * @see Account#withdrawal
      */
     public void withdrawal(double amount) {
-        if (getSolde() - amount >= -this.creditLine) return;
+        if ((this.getSolde() - amount) < (-this.creditLine)) return;
         super.withdrawal(amount);
     }
     public double getCreditLine() {
@@ -44,16 +52,17 @@ public class CurrentAccount extends Account {
     private void setCreditLine(double creditLine) {
         this.creditLine = creditLine;
     }
+
+    //region toString equals and hashCode
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder("Current{");
 
         builder.append(super.toString());
-        builder.append("ligneCredit= ").append(creditLine);
+        builder.append("creditLine= ").append(creditLine);
 
         return builder.append("}").toString();
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -61,4 +70,10 @@ public class CurrentAccount extends Account {
         CurrentAccount account = (CurrentAccount) o;
         return Double.compare(account.getSolde(), getSolde()) == 0 && Double.compare(account.getCreditLine(), getCreditLine()) == 0 && getNumber().equals(account.getNumber()) && getHolder().equals(account.getHolder());
     }
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(super.hashCode(), getCreditLine());
+    }
+    //endregion
+
 }

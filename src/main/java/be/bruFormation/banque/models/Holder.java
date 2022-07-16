@@ -19,6 +19,7 @@ import java.util.Objects;
 public class Holder {
     private String firstName;
     private String lastName;
+    private String nationalNumber;
     private LocalDate birthDate;
     public Holder(String firstName, String lastName) {
         this(firstName, lastName, LocalDate.of(1900, 1, 1));
@@ -27,7 +28,16 @@ public class Holder {
         setFirstName(firstName);
         setLastName(lastName);
         setBirthDate(birthDate);
+        this.nationalNumber = generateNationalNumber(birthDate);
     }
+
+
+    private String generateNationalNumber(LocalDate birthDate) {
+        String firstHalf = birthDate.toString().substring(0,6);
+        String secondHalf = Integer.toString(this.hashCode()).substring(0,5);
+        return firstHalf+secondHalf;
+    }
+
     public String getFirstName() {
         return firstName;
     }
@@ -72,6 +82,6 @@ public class Holder {
     }
 
     public String getNatNumber() {
-        return ""; //TODO set up national number param
+        return nationalNumber;
     }
 }

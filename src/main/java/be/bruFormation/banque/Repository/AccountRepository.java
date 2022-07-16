@@ -1,6 +1,7 @@
 package be.bruFormation.banque.Repository;
 
 import be.bruFormation.banque.models.Account;
+import be.bruFormation.banque.models.Bank;
 import be.bruFormation.banque.models.CurrentAccount;
 import be.bruFormation.banque.models.SaveAccount;
 
@@ -16,19 +17,21 @@ public class AccountRepository extends Repository {
 
     @Override
     protected Account fromResultSet(ResultSet resultSet) throws SQLException {
+        Bank bank = new Bank("..."); //TODO handle bank creation
         HolderRepository holderRepository = new HolderRepository();
         Account account;
         String number = resultSet.getString("number");
         int holderId = resultSet.getInt("holder_id");
-        double solde = resultSet.getDouble("solde");
+        double solde = resultSet.getDouble("sold");
         String desc = resultSet.getString("desc");
         if (desc.equals("CURRENT")) {
             double creditLine = resultSet.getDouble("credit_line");
-            account = new CurrentAccount(number, holderRepository.findHolderById(holderId), solde);
+            account = bank.creatCurrentAccount(holderRepository.findHolderById(holderId), solde);
         } else {
-            Date date = resultSet.getDate("last_whithdrawan_date");
+            Date date = resultSet.getDate("last_withdrawn_date");
             LocalDate dateLastWithdrawn = date.toLocalDate();
-            account = new SaveAccount(number, holderRepository.findHolderById(holderId), solde,dateLastWithdrawn);
+            account = bank.creatSaveAccount(holderRepository.findHolderById(holderId), solde);
+            ((SaveAccount) account).setDateLastWithdrawn(dateLastWithdrawn);
         }
         return  account;
     }

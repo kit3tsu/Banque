@@ -45,10 +45,9 @@ public class BankRepository extends Repository {
     }
     public int findBankIdBySwift(String swift) throws SQLException {
         super.open();
-
         PreparedStatement statement = super.preparedStatement("SELECT id FROM Bank WHERE swift_number = ? ");
         statement.setString(1, swift);
-        ResultSet resultSet = super.executeQuery(statement);
+        ResultSet resultSet = super.executeQuery(statement);// TODO result set for 1 argument
         int id = resultSet.getInt("id");
         super.close();
         return id;
