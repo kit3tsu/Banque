@@ -13,7 +13,7 @@ import com.google.common.base.Objects;
  * @invariant number != null and numero.length = 19
  * @invariant holder != null
  */
-public class Account {
+public abstract class Account {
     private String number;
     private Holder holder;
     private double solde;
@@ -31,6 +31,7 @@ public class Account {
         setHolder(holder);
         setSolde(solde);
     }
+    //region Getter Setter
     public String getNumber() {
         return number;
     }
@@ -40,6 +41,21 @@ public class Account {
 //        }
         this.number = number;
     }
+    public Holder getHolder() {
+        return holder;
+    }
+    private void setHolder(Holder holder) {
+        this.holder = holder;
+    }
+    public double getSolde() {
+        return solde;
+    }
+    private void setSolde(double solde) {
+        if (solde != 0) {
+            this.solde = solde;
+        }
+    }
+    //endregion
     public boolean numberHasChanged(String number){
         String oldNumber = this.getNumber();
         this.setNumber(number);
@@ -84,21 +100,6 @@ public class Account {
             return "0"+Long.toString(control);
         }
     }
-
-    public Holder getHolder() {
-        return holder;
-    }
-    private void setHolder(Holder holder) {
-        this.holder = holder;
-    }
-    public double getSolde() {
-        return solde;
-    }
-    private void setSolde(double solde) {
-        if (solde != 0) {
-            this.solde = solde;
-        }
-    }
     /**
      * Procedure for withdrawing an amount from the account balance
      * @param amount amount > 0
@@ -120,6 +121,7 @@ public class Account {
         return  this.solde + secondAccount.getSolde();
     }
 //TODO generte IBAN
+    //region Override methode from Class Object
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
@@ -142,4 +144,5 @@ public class Account {
     public int hashCode() {
         return Objects.hashCode(getNumber(), getHolder(), getSolde());
     }
+    //endregion
 }

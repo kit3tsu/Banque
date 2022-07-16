@@ -45,7 +45,11 @@ public class Bank {
     public Map.Entry<String,Account>[] getAccounts() {
         Map<String,Account> copy = new HashMap<String,Account>();
         for (Map.Entry<String,Account> entry : this.ACCOUNTS.entrySet()) {
-            copy.put(entry.getKey(), new Account(entry.getValue()));
+            if(entry.getValue() instanceof CurrentAccount){
+                copy.put(entry.getKey(), new CurrentAccount((CurrentAccount) entry.getValue()));
+            } else if (entry.getValue() instanceof SaveAccount) {
+                copy.put(entry.getKey(), new SaveAccount((SaveAccount) entry.getValue()));
+            }
         }
         return this.ACCOUNTS.entrySet().toArray(new Map.Entry[0]);
     }
